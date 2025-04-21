@@ -1,6 +1,5 @@
 package com.lifttheearth.backend.controller;
 
-
 import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.dto.LoginRequest;
 import com.lifttheearth.backend.dto.SignupRequest;
