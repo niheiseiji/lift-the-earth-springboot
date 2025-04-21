@@ -6,13 +6,13 @@ import com.lifttheearth.backend.dto.SignupRequest;
 import com.lifttheearth.backend.dto.UserResponse;
 import com.lifttheearth.backend.security.JwtService;
 import com.lifttheearth.backend.service.UserService;
+import com.lifttheearth.backend.util.JwtCookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest req, HttpServletResponse response) {
         User user = userService.findByEmail(req.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -42,7 +42,14 @@ public class AuthController {
         }
 
         String token = jwtService.generateToken(user);
-        return ResponseEntity.ok(Map.of("token", token));
+        JwtCookieUtil.addJwtToResponse(response, token);
+
+        return ResponseEntity.ok().build(); // トークンは返さず Cookie に保存
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        JwtCookieUtil.clearJwt(response);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me")

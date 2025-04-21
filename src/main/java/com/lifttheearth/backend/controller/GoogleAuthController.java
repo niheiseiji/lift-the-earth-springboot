@@ -3,6 +3,7 @@ package com.lifttheearth.backend.controller;
 import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.security.JwtService;
 import com.lifttheearth.backend.service.UserService;
+import com.lifttheearth.backend.util.JwtCookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,7 @@ public class GoogleAuthController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<?> googleCallback(@RequestParam String code) {
+    public void googleCallback(@RequestParam String code, HttpServletResponse response) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         // ① access_token 取得
@@ -90,19 +91,12 @@ public class GoogleAuthController {
         Map<String, Object> userInfo = userInfoResponse.getBody();
         String email = (String) userInfo.get("email");
 
-        // ③ DB確認 → 新規登録 or 認証
         User user = userService.findByEmail(email)
                 .orElseGet(() -> userService.register(email, ""));
 
-        // ④ JWT発行
         String jwt = jwtService.generateToken(user);
+        JwtCookieUtil.addJwtToResponse(response, jwt);
 
-        String redirectUrl = UriComponentsBuilder
-                .fromUriString("http://localhost:5173/google/callback")
-                .queryParam("token", jwt)
-                .build()
-                .toUriString();
-
-        return ResponseEntity.status(302).header("Location", redirectUrl).build();
+        response.sendRedirect("http://localhost:5173/dashboard");
     }
 }
