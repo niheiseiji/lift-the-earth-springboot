@@ -18,6 +18,7 @@ spring:
   logging:
     level:
       org.flywaydb: DEBUG
+      org.springframework: DEBUG
 
 google:
   client-id: 1013805547853-gfkt7q0h0ctlqs8q138k0cg8pre03k8s.apps.googleusercontent.com

@@ -2,6 +2,7 @@ package com.lifttheearth.backend.security;
 
 import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,15 +31,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // 🔽 CookieからJWTを取り出す
+        // CookieからJWTを取り出す
         String token = extractTokenFromCookies(request);
         if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 🔽 メールアドレス抽出
-        String email = jwtService.extractEmail(token);
+        String email;
+        try {
+            email = jwtService.extractEmail(token);
+        } catch (ExpiredJwtException e) {
+            // JWTが期限切れでも logout 等のルートは通したいので中断しない
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             User user = userRepository.findByEmail(email).orElse(null);
