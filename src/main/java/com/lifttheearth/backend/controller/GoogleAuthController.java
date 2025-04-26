@@ -97,6 +97,6 @@ public class GoogleAuthController {
         String jwt = jwtService.generateToken(user);
         JwtCookieUtil.addJwtToResponse(response, jwt);
 
-        response.sendRedirect("http://localhost:5173/dashboard");
+        response.sendRedirect("http://localhost:5173/");
     }
 }

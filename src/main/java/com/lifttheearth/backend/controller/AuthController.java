@@ -46,6 +46,7 @@ public class AuthController {
 
         return ResponseEntity.ok().build(); // トークンは返さず Cookie に保存
     }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         JwtCookieUtil.clearJwt(response);
