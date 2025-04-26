@@ -21,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth/google")
 public class GoogleAuthController {
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Autowired
     private UserService userService;
@@ -97,6 +99,6 @@ public class GoogleAuthController {
         String jwt = jwtService.generateToken(user);
         JwtCookieUtil.addJwtToResponse(response, jwt);
 
-        response.sendRedirect("http://localhost:5173/");
+        response.sendRedirect(frontendUrl + "/");
     }
 }

@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'me.paulschwarz:spring-dotenv:2.2.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -47,9 +48,9 @@ tasks.named('test') {
 }
 
 flyway {
-	url = 'jdbc:postgresql://localhost:5432/mydb'
-	user = 'postgres'
-	password = 'postgres'
+	url = "jdbc:postgresql://${System.getenv('DB_HOST')}:${System.getenv('DB_PORT')}/${System.getenv('DB_NAME')}"
+	user = System.getenv('DB_USER')
+	password = System.getenv('DB_PASSWORD')
 	schemas = ['public']
 	locations = ['classpath:db/migration']
 }
