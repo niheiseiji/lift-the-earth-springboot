@@ -13,7 +13,7 @@ public class JwtCookieUtil {
     public static void addJwtToResponse(HttpServletResponse response, String jwt) {
         ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofDays(1))
                 .sameSite("Lax")
