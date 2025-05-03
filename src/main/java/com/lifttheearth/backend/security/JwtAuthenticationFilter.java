@@ -29,8 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         // CookieからJWTを取り出す
         String token = extractTokenFromCookies(request);
@@ -66,7 +66,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * Cookieからjwtトークンを取り出す
      */
     private String extractTokenFromCookies(HttpServletRequest request) {
-        if (request.getCookies() == null) return null;
+        if (request.getCookies() == null)
+            return null;
 
         for (Cookie cookie : request.getCookies()) {
             if ("jwt".equals(cookie.getName())) {
