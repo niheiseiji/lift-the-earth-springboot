@@ -25,7 +25,7 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/signup")
-     public ResponseEntity<?> signup(@RequestBody SignupRequest req, HttpServletResponse response) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequest req, HttpServletResponse response) {
         User user = userService.register(req.getEmail(), req.getPassword());
         String token = jwtService.generateToken(user);
         JwtCookieUtil.addJwtToResponse(response, token);

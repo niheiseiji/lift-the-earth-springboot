@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'org.flywaydb:flyway-database-postgresql:11.1.1'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'me.paulschwarz:spring-dotenv:2.2.0'
 	compileOnly 'org.projectlombok:lombok'
