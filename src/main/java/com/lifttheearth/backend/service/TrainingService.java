@@ -29,6 +29,12 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
+    public List<TrainingDto> getAllByUser(Long userId) {
+        return trainingRepository.findAllByUserId(userId).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     @OwnerCheck
     public TrainingDto getById(Long id) {
         Training training = trainingRepository.findById(id)
