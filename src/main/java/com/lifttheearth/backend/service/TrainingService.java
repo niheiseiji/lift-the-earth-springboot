@@ -7,6 +7,8 @@ import com.lifttheearth.backend.dto.training.TrainingDto;
 import com.lifttheearth.backend.dto.training.TrainingMenuDto;
 import com.lifttheearth.backend.dto.training.TrainingMenuSetDto;
 import com.lifttheearth.backend.repository.TrainingRepository;
+import com.lifttheearth.backend.security.OwnerCheck;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +29,7 @@ public class TrainingService {
                 .collect(Collectors.toList());
     }
 
+    @OwnerCheck
     public TrainingDto getById(Long id) {
         Training training = trainingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Training not found"));
@@ -38,6 +41,7 @@ public class TrainingService {
         return toDto(trainingRepository.save(entity));
     }
 
+    @OwnerCheck
     public TrainingDto update(Long id, TrainingDto dto) {
         Training training = trainingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Training not found"));
@@ -46,7 +50,10 @@ public class TrainingService {
         return toDto(trainingRepository.save(updated));
     }
 
+    @OwnerCheck
     public void delete(Long id) {
+        Training training = trainingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Training not found"));
         trainingRepository.deleteById(id);
     }
 
