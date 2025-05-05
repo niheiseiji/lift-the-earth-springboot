@@ -6,6 +6,7 @@ import com.lifttheearth.backend.domain.TrainingMenuSet;
 import com.lifttheearth.backend.dto.training.TrainingDto;
 import com.lifttheearth.backend.dto.training.TrainingMenuDto;
 import com.lifttheearth.backend.dto.training.TrainingMenuSetDto;
+import com.lifttheearth.backend.dto.training.TrainingSummaryDto;
 import com.lifttheearth.backend.repository.TrainingRepository;
 import com.lifttheearth.backend.security.OwnerCheck;
 
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,12 @@ public class TrainingService {
 
     public List<TrainingDto> getAll() {
         return trainingRepository.findAll().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<TrainingDto> getAllByUser(Long userId) {
+        return trainingRepository.findByUserIdOrderByPerformedAtDesc(userId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -101,5 +109,56 @@ public class TrainingService {
 
         training.setTrainingMenus(menus);
         return training;
+    }
+
+    public TrainingSummaryDto getSummary(Long userId) {
+        List<Training> trainings = trainingRepository.findByUserIdOrderByPerformedAtDesc(userId);
+
+        int totalTrainings = trainings.size();
+        int trainingsLast7Days = 0;
+        int trainingsLast30Days = 0;
+        int totalLiftedWeightKg = 0;
+        int maxBench = 0;
+        int maxDeadlift = 0;
+        int maxSquat = 0;
+
+        LocalDate now = LocalDate.now();
+
+        for (Training training : trainings) {
+            LocalDate date = training.getPerformedAt().toLocalDate();
+            if (!date.isBefore(now.minusDays(7)))
+                trainingsLast7Days++;
+            if (!date.isBefore(now.minusDays(30)))
+                trainingsLast30Days++;
+
+            for (TrainingMenu menu : training.getTrainingMenus()) {
+                String menuName = menu.getName();
+
+                for (TrainingMenuSet set : menu.getSets()) {
+                    if ("ベンチプレス".equals(menuName)) {
+                        maxBench = Math.max(maxBench, set.getWeight());
+                    } else if ("デッドリフト".equals(menuName)) {
+                        maxDeadlift = Math.max(maxDeadlift, set.getWeight());
+                    } else if ("スクワット".equals(menuName)) {
+                        maxSquat = Math.max(maxSquat, set.getWeight());
+                    }
+
+                    totalLiftedWeightKg += set.getWeight() * set.getReps();
+                }
+            }
+        }
+
+        int big3TotalWeight = maxBench + maxDeadlift + maxSquat;
+
+        return TrainingSummaryDto.builder()
+                .totalLiftedWeightKg(totalLiftedWeightKg)
+                .trainingsLast7Days(trainingsLast7Days)
+                .trainingsLast30Days(trainingsLast30Days)
+                .totalTrainings(totalTrainings)
+                .maxBenchPress(maxBench)
+                .maxDeadlift(maxDeadlift)
+                .maxSquat(maxSquat)
+                .big3TotalWeight(big3TotalWeight)
+                .build();
     }
 }
