@@ -2,6 +2,7 @@ package com.lifttheearth.backend.controller;
 
 import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.dto.training.TrainingDto;
+import com.lifttheearth.backend.dto.training.TrainingSummaryDto;
 import com.lifttheearth.backend.security.OwnerCheck;
 import com.lifttheearth.backend.service.TrainingService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/trainings")
+@RequestMapping("/api/trainings")
 @RequiredArgsConstructor
 public class TrainingController {
 
@@ -49,5 +50,10 @@ public class TrainingController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id, @AuthenticationPrincipal User user) {
         trainingService.delete(id);
+    }
+
+    @GetMapping("/summary")
+    public TrainingSummaryDto getSummary(@AuthenticationPrincipal User user) {
+        return trainingService.getSummary(user.getId());
     }
 }
