@@ -44,8 +44,10 @@ public class PresetTrainingService {
                 .orElseThrow(() -> new RuntimeException("Not found"));
 
         existing.setPresetName(dto.getPresetName());
-        existing.setPresetTrainingMenus(toEntityMenus(dto.getTrainingMenus(), existing));
         existing.setUpdatedAt(LocalDateTime.now());
+
+        existing.getPresetTrainingMenus().clear();
+        existing.getPresetTrainingMenus().addAll(toEntityMenus(dto.getTrainingMenus(), existing));
 
         PresetTraining saved = presetTrainingRepository.save(existing);
         return toDto(saved);
