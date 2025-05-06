@@ -1,6 +1,7 @@
 package com.lifttheearth.backend.service;
 
 import com.lifttheearth.backend.domain.Training;
+import com.lifttheearth.backend.domain.TrainingMapper;
 import com.lifttheearth.backend.domain.TrainingMenu;
 import com.lifttheearth.backend.domain.TrainingMenuSet;
 import com.lifttheearth.backend.dto.training.TrainingDto;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class TrainingService {
 
     private final TrainingRepository trainingRepository;
+    private final TrainingMapper trainingMapper;
 
     public List<TrainingDto> getAll() {
         return trainingRepository.findAll().stream()
@@ -70,17 +72,7 @@ public class TrainingService {
                 .id(training.getId())
                 .userId(training.getUserId())
                 .performedAt(training.getPerformedAt())
-                .trainingMenus(training.getTrainingMenus().stream().map(menu -> TrainingMenuDto.builder()
-                        .id(menu.getId())
-                        .displayOrder(menu.getDisplayOrder())
-                        .name(menu.getName())
-                        .sets(menu.getSets().stream().map(set -> TrainingMenuSetDto.builder()
-                                .id(set.getId())
-                                .setOrder(set.getSetOrder())
-                                .reps(set.getReps())
-                                .weight(set.getWeight())
-                                .build()).collect(Collectors.toList()))
-                        .build()).collect(Collectors.toList()))
+                .trainingMenus(trainingMapper.toMenuDtoList(training.getTrainingMenus()))
                 .build();
     }
 
