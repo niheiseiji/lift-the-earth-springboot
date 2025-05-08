@@ -5,8 +5,6 @@ import com.lifttheearth.backend.domain.TrainingMapper;
 import com.lifttheearth.backend.domain.TrainingMenu;
 import com.lifttheearth.backend.domain.TrainingMenuSet;
 import com.lifttheearth.backend.dto.training.TrainingDto;
-import com.lifttheearth.backend.dto.training.TrainingMenuDto;
-import com.lifttheearth.backend.dto.training.TrainingMenuSetDto;
 import com.lifttheearth.backend.dto.training.TrainingSummaryDto;
 import com.lifttheearth.backend.repository.TrainingRepository;
 import com.lifttheearth.backend.security.OwnerCheck;
