@@ -2,6 +2,8 @@ package com.lifttheearth.backend.domain;
 
 import java.time.LocalDateTime;
 
+import com.lifttheearth.backend.domain.common.Auditable;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PresetTrainingMenuSet {
+public class PresetTrainingMenuSet extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,9 +28,4 @@ public class PresetTrainingMenuSet {
     private Integer setOrder;
     private Integer reps;
     private Integer weight;
-
-    private Long createdUserId;
-    private Long updatedUserId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

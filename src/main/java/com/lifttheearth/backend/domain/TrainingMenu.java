@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
+import com.lifttheearth.backend.domain.common.Auditable;
+
 @Entity
 @Table(name = "training_menus")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TrainingMenu {
+public class TrainingMenu extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

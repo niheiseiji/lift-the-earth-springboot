@@ -55,6 +55,7 @@ public class TrainingService {
                 .orElseThrow(() -> new EntityNotFoundException("Training not found"));
         Training updated = toEntity(dto);
         updated.setId(id);
+        updated.setPerformedAt(training.getPerformedAt());
         return toDto(trainingRepository.save(updated));
     }
 

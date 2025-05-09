@@ -5,9 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+
+import com.lifttheearth.backend.domain.common.Auditable;
 
 @Entity
 @Table(name = "trainings")
@@ -15,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Training {
+public class Training extends Auditable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,9 +27,4 @@ public class Training {
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingMenu> trainingMenus;
-
-    private Long createdUserId;
-    private Long updatedUserId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

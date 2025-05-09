@@ -74,8 +74,6 @@ public class PresetTrainingService {
                 .id(dto.getId())
                 .userId(dto.getUserId())
                 .presetName(dto.getPresetName())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .presetTrainingMenus(List.of())
                 .build();
 
@@ -90,8 +88,6 @@ public class PresetTrainingService {
                             .presetTraining(preset)
                             .displayOrder(menuDto.getDisplayOrder())
                             .name(menuDto.getName())
-                            .createdAt(LocalDateTime.now())
-                            .updatedAt(LocalDateTime.now())
                             .build();
 
                     List<PresetTrainingMenuSet> sets = menuDto.getSets().stream()
@@ -100,8 +96,6 @@ public class PresetTrainingService {
                                     .setOrder(setDto.getSetOrder())
                                     .reps(setDto.getReps())
                                     .weight(setDto.getWeight())
-                                    .createdAt(LocalDateTime.now())
-                                    .updatedAt(LocalDateTime.now())
                                     .build())
                             .toList();
 
