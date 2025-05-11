@@ -1,8 +1,10 @@
 package com.lifttheearth.backend.controller;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,9 @@ public class UserController {
     @Autowired
     private S3Service s3Service;
 
+    @Value("${s3.bucket}")
+    private String bucketName;
+
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(new UserResponse(
@@ -48,6 +53,20 @@ public class UserController {
     @PostMapping("/upload-profile-image")
     public ResponseEntity<String> uploadImage(@AuthenticationPrincipal User user,
             @RequestParam("file") MultipartFile file) throws IOException {
+
+        // 現在の画像があれば削除
+        String currentUrl = user.getProfileImageUrl();
+        if (currentUrl != null && !currentUrl.isEmpty()) {
+            System.out.println("delete?");
+            try {
+                URI uri = URI.create(currentUrl);
+                String currentKey = uri.getPath().substring(1);
+                s3Service.delete(currentKey);
+            } catch (Exception e) {
+                System.err.println("旧画像削除失敗: " + e.getMessage());
+            }
+        }
+        // 新しい画像を登録
         String key = "profile/" + user.getId() + "_" + file.getOriginalFilename();
         String url = s3Service.upload(key, file.getInputStream(), file.getSize(), file.getContentType());
 

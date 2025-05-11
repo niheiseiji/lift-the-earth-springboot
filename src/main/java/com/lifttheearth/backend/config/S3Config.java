@@ -24,17 +24,19 @@ public class S3Config {
     @Value("${s3.endpoint}")
     private String endpoint;
 
+    @Value("${s3.region}")
+    private String region;
+
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(accessKey, secretKey)))
-                .region(Region.of("auto"))
+                .region(Region.of(region))
                 .serviceConfiguration(S3Configuration.builder()
                         .pathStyleAccessEnabled(true)
                         .build())
                 .build();
     }
-
 }
