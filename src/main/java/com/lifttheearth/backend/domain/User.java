@@ -20,8 +20,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(length = 255)
-    private String name;
+    @Column(name = "display_name", length = 255)
+    private String displayName;
+
+    @Column(name = "unique_name", nullable = false, unique = true)
+    private String uniqueName;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

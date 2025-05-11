@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lifttheearth.backend.domain.User;
-import com.lifttheearth.backend.dto.UpdateUserNameRequest;
+import com.lifttheearth.backend.dto.UpdateUserSettingRequest;
 import com.lifttheearth.backend.dto.UserResponse;
 import com.lifttheearth.backend.repository.UserRepository;
 
@@ -23,13 +23,15 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(new UserResponse(
-                user.getId(), user.getEmail(), user.getName(), user.getCreatedAt().toString()));
+                user.getId(), user.getEmail(), user.getUniqueName(), user.getDisplayName(),
+                user.getCreatedAt().toString()));
     }
 
     @PutMapping("/setting")
-    public ResponseEntity<Void> updateUserName(@AuthenticationPrincipal User user,
-            @RequestBody UpdateUserNameRequest request) {
-        user.setName(request.getName());
+    public ResponseEntity<Void> updateUserSetting(@AuthenticationPrincipal User user,
+            @RequestBody UpdateUserSettingRequest request) {
+        user.setDisplayName(request.getDisplayName());
+        user.setUniqueName(request.getUniqueName());
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
