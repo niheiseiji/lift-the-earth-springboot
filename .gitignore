@@ -38,3 +38,4 @@ out/
 
 ### Environment settings ###
 .env
+.env.production
