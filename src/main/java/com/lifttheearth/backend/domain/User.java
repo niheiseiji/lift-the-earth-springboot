@@ -26,5 +26,9 @@ public class User {
     @Column(name = "unique_name", nullable = false, unique = true)
     private String uniqueName;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -32,3 +32,11 @@ google:
   client-id: ${GOOGLE_CLIENT_ID}
   client-secret: ${GOOGLE_CLIENT_SECRET}
   redirect-uri: ${BACKEND_URL}/api/auth/google/callback
+
+# s3互換のsakuraのクラウドストレージを使う
+s3:
+  endpoint: ${CLOUD_AWS_S3_ENDPOINT}
+  accessKey: ${CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+  secretKey: ${CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+  region: ${CLOUD_AWS_REGION_STATIC}
+  bucket: ${BUCKET_NAME}

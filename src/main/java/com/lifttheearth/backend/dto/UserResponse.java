@@ -10,5 +10,6 @@ public class UserResponse {
     private String email;
     private String uniqueName;
     private String displayName;
+    private String profileImageUrl;
     private String createdAt;
 }
