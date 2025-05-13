@@ -13,7 +13,8 @@ import java.util.Date;
 @Service
 public class JwtService {
     private static final String SECRET_KEY = "my-very-secret-key-that-should-be-long-enough";
-    private static final long EXPIRATION_MS = 1000 * 60 * 60; // 1 hour
+    private static final long EXPIRATION_MS = 1000 * 60 * 60; // 60 min
+    private static final long REFRESH_EXPIRATION_MS = 1000 * 60 * 60 * 24 * 14; // 7 days
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -44,5 +45,18 @@ public class JwtService {
         } catch (JwtException e) {
             return false;
         }
+    }
+
+    public String generateRefreshToken(User user) {
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_MS))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public boolean isRefreshTokenValid(String token) {
+        return isTokenValid(token);
     }
 }

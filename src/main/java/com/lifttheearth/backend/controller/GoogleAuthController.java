@@ -4,6 +4,8 @@ import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.security.JwtService;
 import com.lifttheearth.backend.service.UserService;
 import com.lifttheearth.backend.util.JwtCookieUtil;
+
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,8 +94,22 @@ public class GoogleAuthController {
                 User user = userService.findByEmail(email)
                                 .orElseGet(() -> userService.register(email, ""));
 
+                // JWTとリフレッシュトークンの発行
                 String jwt = jwtService.generateToken(user);
+                String refreshToken = jwtService.generateRefreshToken(user);
+
+                // ユーザに保存
+                user.setRefreshToken(refreshToken);
+                userService.save(user);
+
+                // Cookieに設定
                 JwtCookieUtil.addJwtToResponse(response, jwt);
+
+                Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
+                refreshCookie.setHttpOnly(true);
+                refreshCookie.setPath("/");
+                refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7日間
+                response.addCookie(refreshCookie);
 
                 response.sendRedirect(frontendUrl + "/");
         }

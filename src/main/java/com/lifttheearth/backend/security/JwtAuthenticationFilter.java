@@ -32,6 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // CookieからJWTを取り出す
         String token = extractTokenFromCookies(request);
         if (token == null) {
@@ -44,7 +50,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             email = jwtService.extractEmail(token);
         } catch (ExpiredJwtException e) {
             // JWTが期限切れでも logout 等のルートは通したいので中断しない
-            filterChain.doFilter(request, response);
+            // filterChain.doFilter(request, response);
+            // return;
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // ← 明示的に401
             return;
         }
 
