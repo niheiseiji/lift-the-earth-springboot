@@ -1,6 +1,6 @@
 package com.lifttheearth.backend.dto.training;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class TrainingDto {
     private Long id;
     private Long userId;
-    private ZonedDateTime performedAt;
+    private LocalDateTime performedAt;
     private List<TrainingMenuDto> trainingMenus;
 }

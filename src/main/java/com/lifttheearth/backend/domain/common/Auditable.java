@@ -28,5 +28,5 @@ public abstract class Auditable {
     private Long updatedUserId;
 
     @Column(nullable = false)
-    private Boolean deleteFlag = false; // デフォルト false
+    private Boolean deleteFlag = false;
 }

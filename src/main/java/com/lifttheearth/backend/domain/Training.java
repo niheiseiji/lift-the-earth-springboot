@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.ZonedDateTime;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.lifttheearth.backend.domain.common.Auditable;
@@ -23,7 +24,7 @@ public class Training extends Auditable {
     private Long id;
 
     private Long userId;
-    private ZonedDateTime performedAt;
+    private LocalDateTime performedAt;
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingMenu> trainingMenus;
