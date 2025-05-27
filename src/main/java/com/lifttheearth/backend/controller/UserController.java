@@ -2,6 +2,7 @@ package com.lifttheearth.backend.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lifttheearth.backend.domain.User;
 import com.lifttheearth.backend.dto.UpdateUserSettingRequest;
 import com.lifttheearth.backend.dto.UserResponse;
+import com.lifttheearth.backend.dto.group.GroupDto;
 import com.lifttheearth.backend.repository.UserRepository;
+import com.lifttheearth.backend.service.GroupService;
 import com.lifttheearth.backend.service.S3Service;
 
 @RestController
@@ -30,6 +33,9 @@ public class UserController {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private GroupService groupService;
 
     @Value("${s3.bucket}")
     private String bucketName;
@@ -74,5 +80,11 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.ok(url);
+    }
+
+    @GetMapping("/me/groups")
+    public ResponseEntity<List<GroupDto>> getMyGroups(@AuthenticationPrincipal User user) {
+        List<GroupDto> groups = groupService.getGroupsByUserId(user.getId());
+        return ResponseEntity.ok(groups);
     }
 }

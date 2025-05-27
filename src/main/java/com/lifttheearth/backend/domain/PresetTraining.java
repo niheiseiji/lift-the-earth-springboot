@@ -1,14 +1,20 @@
 package com.lifttheearth.backend.domain;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import com.lifttheearth.backend.domain.common.Auditable;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.lifttheearth.backend.domain.common.Auditable;
 
 @Entity
 @Table(name = "preset_trainings")
