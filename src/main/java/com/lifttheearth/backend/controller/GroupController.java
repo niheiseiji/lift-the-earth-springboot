@@ -34,7 +34,7 @@ public class GroupController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<GroupDto> searchGroup(@RequestParam String groupId) {
+    public ResponseEntity<GroupDto> searchGroup(@AuthenticationPrincipal User user, @RequestParam String groupId) {
         GroupDto group = groupService.getGroupByGroupId(groupId);
         return ResponseEntity.ok(group);
     }
@@ -47,7 +47,8 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}/members")
-    public ResponseEntity<GroupMembersResponseDto> getGroupMembers(@PathVariable Long groupId) {
+    public ResponseEntity<GroupMembersResponseDto> getGroupMembers(@AuthenticationPrincipal User user,
+            @PathVariable Long groupId) {
         GroupMembersResponseDto response = groupService.getGroupMembers(groupId);
         return ResponseEntity.ok(response);
     }
