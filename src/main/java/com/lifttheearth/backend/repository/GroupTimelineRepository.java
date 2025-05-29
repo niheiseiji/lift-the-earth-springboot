@@ -8,4 +8,6 @@ import com.lifttheearth.backend.domain.GroupTimeline;
 
 public interface GroupTimelineRepository extends JpaRepository<GroupTimeline, Long> {
     List<GroupTimeline> findByUserId(Long userId);
+
+    List<GroupTimeline> findByGroupId(Long groupId);
 }
