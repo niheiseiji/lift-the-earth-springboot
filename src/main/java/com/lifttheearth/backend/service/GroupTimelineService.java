@@ -24,6 +24,7 @@ public class GroupTimelineService {
     public GroupTimelineDto createTimeline(User user, CreateGroupTimelineRequestDto request) {
         GroupTimeline timeline = new GroupTimeline();
         timeline.setUser(user);
+        timeline.setUserId(user.getId());
         timeline.setTrainingId(request.getTrainingId());
         timeline.setComment(request.getComment());
         timeline.setImageUrl(request.getImageUrl());

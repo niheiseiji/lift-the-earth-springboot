@@ -25,6 +25,9 @@ public class GroupTimeline {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column
     private Long trainingId;
 
